@@ -1,0 +1,4 @@
+le but de cette partie est de comprendre la logique de React et de pouvoir transformer un simple fichier HTML en React 
+
+
+partie du cours suivi : https://openclassrooms.com/fr/courses/7008001-debutez-avec-react/7134597-apprehendez-la-logique-de-react
