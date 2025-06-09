@@ -1,29 +1,24 @@
-# importer 
-FROM debian:9
+FROM debian:bookworm
 
-# run permet de lancer des commandes dans le conteneur
-#run est utilisé une fois lors de la construction de l'image
-RUN apt-get update -yq \
-&& apt-get install curl gnupg -yq \
-&& curl -sL https://deb.nodesource.com/setup_10.x | bash \
-&& apt-get install nodejs -yq \
-&& apt-get clean -y
+# Mise à jour et installation des outils nécessaires
+RUN apt-get update -yq && \
+    apt-get install -yq curl gnupg ca-certificates lsb-release && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" > /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update -yq && \
+    apt-get install -yq nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-#add permet d'ajouter des fichiers dans le conteneur
+# Ajout des fichiers
 ADD . /app/
-
-#wordir permet de te deplacer dans un fichier
 WORKDIR /app
 
-
+# Installation des dépendances Node.js
 RUN npm install
 
-#exposee permet d'ecouter le port sur lequel l'application va tourner
 EXPOSE 2368
-#volume permet de savoir quel dossier partager entre le conteneur et l'hote
 VOLUME /app/logs
 
-
-#cmd permet de lancer une commande pour demarrer le conteneur
-CMD npm run start
+CMD ["npm", "run", "start"]
 
